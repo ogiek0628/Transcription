@@ -1,0 +1,177 @@
+/* 全体のデザイン */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+header {
+    background-color: #009dff;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+header p {
+    margin: 10px 0 0;
+    font-size: 1.2rem;
+}
+
+/* アップロードセクション */
+.upload-section {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.upload-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+}
+
+.upload-form input[type="file"] {
+    padding: 10px;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.upload-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    width: 100%;
+    max-width: 400px;
+    transition: background-color 0.3s ease;
+}
+
+.upload-btn:hover {
+    background-color: #0056b3;
+}
+
+/* ダウンロードリンク */
+#download-link {
+    text-align: center;
+    margin-top: 30px;
+}
+
+#transcription-link {
+    font-weight: bold;
+    color: #007bff;
+    font-size: 1.2rem;
+    text-decoration: none;
+}
+
+#transcription-link:hover {
+    color: #0056b3;
+}
+
+/* 広告セクション */
+.advertisement {
+    background-color: #fff3cd;
+    padding: 20px;
+    margin-top: 40px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.advertisement h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.advertisement a {
+    color: #007bff;
+    font-weight: bold;
+    font-size: 1.1rem;
+    text-decoration: none;
+}
+
+.advertisement a:hover {
+    color: #0056b3;
+}
+
+/* フッター */
+footer {
+    background-color: #009dff;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* プログレスバー */
+#progress-bar-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+progress {
+    width: 100%;
+    height: 20px;
+    margin-top: 10px;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+progress::-webkit-progress-bar {
+    background-color: #f3f3f3;
+    border-radius: 5px;
+}
+
+progress::-webkit-progress-value {
+    background-color: #7db7d8;  /* 淡い青色 */
+    border-radius: 5px;
+}
+
+progress::-moz-progress-bar {
+    background-color: #7db7d8;
+    border-radius: 5px;
+}
+
+/* スピナーアニメーション */
+.spinner {
+    border: 4px solid #f3f3f3; /* 明るい灰色の背景 */
+    border-top: 4px solid #7db7d8; /* 淡い青色 */
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 2s linear infinite; /* 回転アニメーション */
+}
+
+/* 回転のアニメーション */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ローディングインジケーターのテキスト */
+#loading {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* ローディングインジケーターを最初は非表示にする */
+#loading {
+    display: none;
+}

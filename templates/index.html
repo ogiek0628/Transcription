@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Transcription Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <h1>動画から文字起こし</h1>
+            <p>Your automatic video transcription solution</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="upload-section">
+            <h2>動画をアップロードしてください</h2>
+            <form id="upload-form" class="upload-form">
+                <input type="file" name="file" id="file" required>
+                <button type="submit" class="upload-btn">Upload</button>
+            </form>
+            <div id="message"></div>
+
+            <!-- プログレスバー -->
+            <div id="progress-bar-container" style="display:none;">
+                <p>Upload Progress:</p>
+                <progress id="progress-bar" value="0" max="100"></progress>
+            </div>
+
+            <!-- ローディングインジケーター -->
+            <div id="loading" style="display:none;">
+                <p>Uploading and processing your video...</p>
+                <div class="spinner"></div>
+            </div>
+        </section>
+
+        <section id="download-link" style="display:none;">
+            <h3>テキストファイルをダウンロード</h3>
+            <a id="transcription-link" href="#" download>ここをクリック</a>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Video Transcription Tool | All Rights Reserved</p>
+    </footer>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        const messageElement = document.getElementById('message');
+        const downloadLink = document.getElementById('download-link');
+        const transcriptionLink = document.getElementById('transcription-link');
+        const loadingIndicator = document.getElementById('loading');
+        const progressBarContainer = document.getElementById('progress-bar-container');
+        const progressBar = document.getElementById('progress-bar');
+
+        form.onsubmit = function(event) {
+            event.preventDefault();  // フォーム送信を防ぐ
+
+            // 画面の初期状態設定
+            messageElement.textContent = '';
+            downloadLink.style.display = 'none';
+            loadingIndicator.style.display = 'block';  // ローディングインジケーターを表示
+            progressBarContainer.style.display = 'block';  // プログレスバーを表示
+            progressBar.value = 0;  // プログレスバーを初期化
+
+            const formData = new FormData(form);
+            const xhr = new XMLHttpRequest();
+            
+            // プログレスイベントを設定
+            xhr.upload.onprogress = function(event) {
+                if (event.lengthComputable) {
+                    const percent = (event.loaded / event.total) * 100;
+                    progressBar.value = percent;  // プログレスバーを更新
+                }
+            };
+
+            xhr.open('POST', '/upload', true);
+            xhr.setRequestHeader('Accept', 'application/json');
+
+            // アップロード成功時の処理
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const result = JSON.parse(xhr.responseText);
+                    messageElement.textContent = result.message;
+                    transcriptionLink.href = '/download/' + result.transcription_file;
+                    downloadLink.style.display = 'block';
+                } else {
+                    messageElement.textContent = "Error: " + xhr.responseText;
+                }
+            };
+
+            // エラーハンドリング
+            xhr.onerror = function() {
+                messageElement.textContent = "エラーが発生しました。再度お試しください。";
+            };
+
+            // 最後にインジケーターやプログレスバーを非表示にする
+            xhr.onloadend = function() {
+                loadingIndicator.style.display = 'none';  // ローディングインジケーターを非表示
+                progressBarContainer.style.display = 'none';  // プログレスバーを非表示
+            };
+
+            // アップロードの開始
+            xhr.send(formData);
+        };
+    </script>
+</body>
+</html>
