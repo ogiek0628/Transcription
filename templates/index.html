@@ -85,12 +85,21 @@
                 if (xhr.status === 200) {
                     const result = JSON.parse(xhr.responseText);
                     messageElement.textContent = result.message;
-                    transcriptionLink.href = '/download/' + result.transcription_file;
+
+                    // 不要な拡張子（例えば mp4）を削除してから、_transcription.txtを付ける
+                    let transcriptionFile = result.transcription_file;
+
+                    // 不要な拡張子を削除
+                    transcriptionFile = transcriptionFile.replace('.mp4', '').replace('.avi', '').replace('.mov', '') ;
+
+                    // ダウンロードリンクを更新
+                    transcriptionLink.href = '/download/' + encodeURIComponent(transcriptionFile);
                     downloadLink.style.display = 'block';
                 } else {
                     messageElement.textContent = "Error: " + xhr.responseText;
                 }
             };
+
 
             // エラーハンドリング
             xhr.onerror = function() {

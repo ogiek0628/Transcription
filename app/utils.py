@@ -1,6 +1,7 @@
 import os
 import moviepy.editor as mp
 import whisper
+from flask import current_app
 
 ALLOWED_EXTENSIONS = {'mp4', 'mov', 'avi', 'mkv'}
 
@@ -10,9 +11,15 @@ def allowed_file(filename):
 
 # 動画ファイルから音声を抽出し、Whisperで文字起こしを行う
 def transcribe_video(video_path):
-    # 音声ファイルの保存パス
-    audio_path = os.path.splitext(video_path)[0] + "_audio.mp3"
-    transcription_file = os.path.splitext(video_path)[0] + "_transcription.txt"
+    # 動画ファイル名を取得
+    filename_without_extension = os.path.splitext(os.path.basename(video_path))[0]  # 拡張子を取り除いたファイル名
+
+    # Flaskの設定からUPLOAD_FOLDERを取得し、保存先を決定
+    upload_folder = current_app.config['UPLOAD_FOLDER']
+    
+    # 保存先のパスを作成
+    audio_path = os.path.join(upload_folder, filename_without_extension + "_audio.mp3")
+    transcription_file = os.path.join(upload_folder, filename_without_extension + "_transcription.txt")
 
     # 動画から音声を抽出
     video = mp.VideoFileClip(video_path)
@@ -22,4 +29,9 @@ def transcribe_video(video_path):
     model = whisper.load_model("base")
     result = model.transcribe(audio_path)
 
-    return result
+    # 文字起こし結果をファイルに保存
+    with open(transcription_file, "w", encoding="utf-8") as f:
+        f.write(result["text"])
+
+    # 保存したファイルのパスを返す
+    return transcription_file
