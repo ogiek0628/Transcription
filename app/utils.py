@@ -21,12 +21,15 @@ def transcribe_video(video_path):
     audio_path = os.path.join(upload_folder, filename_without_extension + "_audio.mp3")
     transcription_file = os.path.join(upload_folder, filename_without_extension + "_transcription.txt")
 
-    # 動画から音声を抽出
+    # 動画から音声を抽出（音声のみを抽出して保存）
     video = mp.VideoFileClip(video_path)
-    video.audio.write_audiofile(audio_path)
+    audio = video.audio
+
+    # 音声をMP3形式で保存
+    audio.write_audiofile(audio_path, codec='mp3', ffmpeg_params=["-q:a", "0"])
 
     # Whisper モデルをロードして文字起こし
-    model = whisper.load_model("base")
+    model = whisper.load_model("base")  # "base" モデルは、処理が速くて高精度
     result = model.transcribe(audio_path)
 
     # 文字起こし結果をファイルに保存
