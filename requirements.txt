@@ -1,6 +1,6 @@
 pip<=25.01
 Flask==2.3.3
-flask_wtf==1.2.2
+flask_wtf==1.2.1
 moviepy==1.0.3
 openai_whisper==20240930
 tkinterdnd2==0.4.2
