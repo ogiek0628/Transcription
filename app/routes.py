@@ -56,7 +56,7 @@ def download_file(filename):
         if os.path.exists(file_path):
             response = send_file(file_path, as_attachment=True)
             
-            video_file_path = file_path.replace("_transcription.txt", "")  # 動画ファイルのパス
+            video_file_path = file_path.replace("_transcription.txt", ".mp4")  # 動画ファイルのパス
             audio_file_path = video_file_path.replace(".mp4", "_audio.mp3")  # 音声ファイルのパス
 
             os.remove(file_path)  # テキストファイル
