@@ -1,4 +1,5 @@
 pip<=25.01
+gunicorn==20.1.0
 Flask==2.3.3
 flask_wtf==1.2.1
 moviepy==1.0.3
