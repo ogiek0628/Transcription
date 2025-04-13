@@ -1,5 +1,5 @@
 import os
-import moviepy.editor as mp
+import subprocess
 import whisper
 from flask import current_app
 
@@ -21,15 +21,23 @@ def transcribe_video(video_path):
     audio_path = os.path.join(upload_folder, filename_without_extension + "_audio.mp3")
     transcription_file = os.path.join(upload_folder, filename_without_extension + "_transcription.txt")
 
-    # 動画から音声を抽出（音声のみを抽出して保存）
-    video = mp.VideoFileClip(video_path)
-    audio = video.audio
-
-    # 音声をMP3形式で保存
-    audio.write_audiofile(audio_path, codec='mp3', ffmpeg_params=["-q:a", "0"])
+    # ffmpegを使用して音声を抽出
+    command = [
+        'ffmpeg', 
+        '-i', video_path,  # 入力ファイル
+        '-vn',             # 動画を無視
+        '-acodec', 'libmp3lame',  # MP3形式で音声を保存
+        '-ar', '44100',    # サンプリングレート
+        '-ac', '2',        # ステレオ
+        '-ab', '192k',     # ビットレート
+        audio_path         # 出力ファイル
+    ]
+    
+    # コマンドを実行
+    subprocess.run(command, check=True)
 
     # Whisper モデルをロードして文字起こし
-    model = whisper.load_model("base")  # "base" モデルは、処理が速くて高精度
+    model = whisper.load_model("base")
     result = model.transcribe(audio_path)
 
     # 文字起こし結果をファイルに保存
